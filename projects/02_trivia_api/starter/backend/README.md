@@ -72,9 +72,12 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions'
+GET '/categories/<int:cat_id>/questions'
+POST '/questions/search'
+DELETE '/questions/<int:Q_id>'
+POST '/questions'
+POST '/quizzes'
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -86,6 +89,195 @@ GET '/categories'
 '4' : "History",
 '5' : "Entertainment",
 '6' : "Sports"}
+
+GET '/questions'
+- Returns a list of questions objects, success value, total number of questions and categories  
+- Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
+- Sample: curl http://127.0.0.1:5000/questions
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    },
+    {
+      "answer": "Muhammad Ali",
+      "category": 4,
+      "difficulty": 1,
+      "id": 9,
+      "question": "What boxer's original name is Cassius Clay?"
+    },
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "Uruguay",
+      "category": 6,
+      "difficulty": 4,
+      "id": 11,
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    },
+    {
+      "answer": "George Washington Carver",
+      "category": 4,
+      "difficulty": 2,
+      "id": 12,
+      "question": "Who invented Peanut Butter?"
+    },
+    {
+      "answer": "Lake Victoria",
+      "category": 3,
+      "difficulty": 2,
+      "id": 13,
+      "question": "What is the largest lake in Africa?"
+    },
+    {
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    },
+    {
+      "answer": "Agra",
+      "category": 3,
+      "difficulty": 2,
+      "id": 15,
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ],
+  "success": true,
+  "total_questions": 19
+}
+
+GET '/categories/<int:cat_id>/questions'
+- Returns a list of questions within the given category id in the URL.
+- Results has list of question objects,success value,Number of questions and category id.
+- Sample: curl http://127.0.0.1:5000/categories/1/questions
+
+{
+  "current_category": 1,
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "Blood",
+      "category": 1,
+      "difficulty": 4,
+      "id": 22,
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }
+  ],
+  "success": true,
+  "total_questions": 3
+}
+
+POST '/questions/search'
+
+- returns any questions which has the search term.
+- result has list of question objects,success value,and Number of questions.
+- sample curl -X POST http://127.0.0.1:5000/questions/search -H "Content-Type: application/json" -d '{"searchTerm": "Liver"}'
+
+{
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    }
+  ],
+  "success": true,
+  "total_questions": 1
+}
+
+DELETE '/questions/<int:Q_id>'
+
+- If question id provided, deletes the question. Returns the success value.
+- sample curl -X POST http://127.0.0.1:5000/questions/5 
+
+{
+  "success": true
+}
+
+POST '/questions'
+
+- If provided, creates a new question. Returns the success value.
+- sample curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    }'
+
+
+{
+  "success": true
+}
+
+
+POST '/quizzes'
+
+- returns a random questions to play the quiz.
+- request is sent with category and previous question parameters
+- sample curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d 
+'{'previous_questions': [], 'quiz_category': {'type': 'Science', 'id': '1'}}'
+
+{
+ "questions": 
+    {
+      "answer": "The Liver",
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    }
+ "success": true
+}
+
 
 ```
 
