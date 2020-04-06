@@ -109,16 +109,18 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message'], 'Resource Not Found')
 
-    def test_422_delete_questions_not_exist(self):
+    def test_404_delete_questions_not_exist(self):
 
-        res = self.client().delete('/questions/999')
+        res = self.client().delete('/questions/100')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message'], 'Unprocessable')
 
-    def test_405_create_questions_not_allowed(self):
+
+    def test_404_create_questions_not_allowed(self):
+
         res = self.client().post('/questions/100', json=self.new_question)
         data = json.loads(res.data)
 
@@ -127,8 +129,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['message'], 'method not allowed')
 
     def test_404_search_questions_not_found(self):
+
         res = self.client().\
-            post('/questions/search', json={'searchTerm': '#@^'})
+            post('/questions/search', json={'searchTerm': '123'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
