@@ -136,9 +136,7 @@ def create_app(test_config=None):
     @app.route("/categories/<int:cat_id>/questions", methods=['GET'])
     def get_questions_id(cat_id):
         try:
-            questions = Question.query\
-                        .filter(Question.category == cat_id)\
-                        .all()
+            questions = Question.query.filter(Question.category == cat_id)  .all()
             current_questions = [question.format() for question in questions]
 
             if len(current_questions) == 0:
@@ -167,15 +165,10 @@ def create_app(test_config=None):
             output = {}
 
             if (cat_id == 0):
-                questions = Question.query\
-                            .filter(Question.id.notin_(prev_questions))\
-                            .all()
+                questions = Question.query.filter(Question.id.notin_(prev_questions)).all()
 
             else:
-                questions = Question.query\
-                            .filter(Question.category == cat_id)\
-                            .filter(Question.id.notin_(prev_questions))\
-                            .all()
+                questions = Question.query.filter(Question.category == cat_id).filter(Question.id.notin_(prev_questions)).all()
 
             if len(questions) > 0:
                 new_question = questions[random.randrange
@@ -206,12 +199,20 @@ def create_app(test_config=None):
             "message": "Resource Not Found"
         }), 404
 
+    @app.errorhandler(405)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "Method not Allowed"
+        }), 405
+
     @app.errorhandler(422)
     def not_found(error):
         return jsonify({
             "success": False,
             "error": 422,
-            "message": "unprocessable"
+            "message": "Unprocessable"
         }), 422  
     return app
 
